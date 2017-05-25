@@ -90,13 +90,14 @@ public class PokerHandServiceImpl implements PokerHandService {
 		}
 		hand.setPlayers(participatingPlayers);
 
-		//Sort and get the next player to act (immediately after the big blind)
+		// Sort and get the next player to act (immediately after the big blind)
+		// TODO: remove players variable
 		List<PlayerHand> players = new ArrayList<PlayerHand>();
 		players.addAll(participatingPlayers);
 		Player nextToAct = PlayerUtil.getNextPlayerToAct(hand, this.getPlayerInBB(hand));
 		hand.setCurrentToAct(nextToAct);
 
-		//Register the Forced Small and Big Blind bets as part of the hand
+		// Register the Forced Small and Big Blind bets as part of the hand
 		Player smallBlind = getPlayerInSB(hand);
 		Player bigBlind = getPlayerInBB(hand);
 		int sbBet = 0;
@@ -136,21 +137,20 @@ public class PokerHandServiceImpl implements PokerHandService {
 	@GameAction
 	public void endHand(HandEntity hand) {
 		hand = handEntityRepository.save(hand);
-		if (!isActionResolved(hand)) {
-			throw new UnresolvedHandException("There are unresolved betting actions");
-		}
-
+		assertActionResolved(hand);
 		Game game = hand.getGame();
 
 		hand.setCurrentToAct(null);
 
 		determineWinner(hand);
 
-		//If players were eliminated this hand, set their finished position
+		// If players were eliminated this hand, set their finished position
 		List<PlayerHand> phs = new ArrayList<PlayerHand>();
 		phs.addAll(hand.getPlayers());
-		//Sort the list of PlayerHands so the one with the smallest chips at risk is first.
-		//Use this to determine finish position if multiple players are eliminated on the same hand.
+		// Sort the list of PlayerHands so the one with the smallest chips at
+		// risk is first.
+		// Use this to determine finish position if multiple players are
+		// eliminated on the same hand.
 		Collections.sort(phs, new PlayerHandBetAmountComparator());
 		for (PlayerHand ph : phs) {
 			if (ph.getPlayer().getChips() <= 0) {
@@ -160,29 +160,34 @@ public class PokerHandServiceImpl implements PokerHandService {
 			}
 		}
 
-		//For all players in the game, remove any who are out of chips (eliminated)
+		// For all players in the game, remove any who are out of chips
+		// (eliminated)
 		List<Player> players = new ArrayList<Player>();
 		for (Player p : game.getPlayers()) {
 			if (p.getChips() != 0) {
 				players.add(p);
 			} else if (p.equals(game.getPlayerInBTN())) {
-				//If the player on the Button has been eliminated, we still need this player
-				//in the list so that we calculate next button from its position
+				// If the player on the Button has been eliminated, we still
+				// need this player
+				// in the list so that we calculate next button from its
+				// position
 				players.add(p);
 			}
 		}
 		if (game.getPlayersRemaining() < 2) {
-			//TODO end game. Move to start hand?
+			// TODO end game. Move to start hand?
 		}
 
-		//Rotate Button.  Use Simplified Moving Button algorithm (for ease of coding)
-		//This means we always rotate button.  Blinds will be next two active players.  May skip blinds.
+		// Rotate Button. Use Simplified Moving Button algorithm (for ease of
+		// coding)
+		// This means we always rotate button. Blinds will be next two active
+		// players. May skip blinds.
 		Player nextButton = PlayerUtil.getNextPlayerInGameOrder(players, game.getPlayerInBTN());
 		game.setPlayerInBTN(nextButton);
 
 		gameRepository.save(game);
 
-		//Remove Deck from database. No need to keep that around anymore
+		// Remove Deck from database. No need to keep that around anymore
 		hand.setCards(new ArrayList<Card>());
 		handEntityRepository.save(hand);
 	}
@@ -199,7 +204,6 @@ public class PokerHandServiceImpl implements PokerHandService {
 		return handEntityRepository.save(hand);
 	}
 
-
 	@Override
 	@Transactional
 	@GameAction
@@ -207,12 +211,10 @@ public class PokerHandServiceImpl implements PokerHandService {
 		if (hand.getBoard().getFlop1() != null) {
 			throw new IllegalStateException("Unexpected Flop.");
 		}
-		//Re-attach to persistent context for this transaction (Lazy Loading stuff)
+		// Re-attach to persistent context for this transaction (Lazy Loading
+		// stuff)
 		hand = handEntityRepository.save(hand);
-		if (!isActionResolved(hand)) {
-			throw new UnresolvedHandException("There are unresolved preflop actions");
-		}
-
+		assertActionResolved(hand);
 		Deck d = new Deck(hand.getCards());
 		d.shuffleDeck();
 		BoardEntity board = hand.getBoard();
@@ -231,12 +233,10 @@ public class PokerHandServiceImpl implements PokerHandService {
 		if (hand.getBoard().getFlop1() == null || hand.getBoard().getTurn() != null) {
 			throw new IllegalStateException("Unexpected Turn.");
 		}
-		//Re-attach to persistent context for this transaction (Lazy Loading stuff)
+		// Re-attach to persistent context for this transaction (Lazy Loading
+		// stuff)
 		hand = handEntityRepository.save(hand);
-		if (!isActionResolved(hand)) {
-			throw new UnresolvedHandException("There are unresolved flop actions");
-		}
-
+		assertActionResolved(hand);
 		Deck d = new Deck(hand.getCards());
 		d.shuffleDeck();
 		BoardEntity board = hand.getBoard();
@@ -254,11 +254,10 @@ public class PokerHandServiceImpl implements PokerHandService {
 				|| hand.getBoard().getRiver() != null) {
 			throw new IllegalStateException("Unexpected River.");
 		}
-		//Re-attach to persistent context for this transaction (Lazy Loading stuff)
+		// Re-attach to persistent context for this transaction (Lazy Loading
+		// stuff)
 		hand = handEntityRepository.save(hand);
-		if (!isActionResolved(hand)) {
-			throw new UnresolvedHandException("There are unresolved turn actions");
-		}
+		assertActionResolved(hand);
 
 		Deck d = new Deck(hand.getCards());
 		d.shuffleDeck();
@@ -288,9 +287,9 @@ public class PokerHandServiceImpl implements PokerHandService {
 			}
 		}
 
-		//Move action to the next player
+		// Move action to the next player
 		Player next = PlayerUtil.getNextPlayerToAct(hand, currentPlayer);
-		//If the player being sat out needs to call, that player is folded
+		// If the player being sat out needs to call, that player is folded
 		if (playerHand != null && hand.getTotalBetAmount() > playerHand.getRoundBetAmount()) {
 			PlayerUtil.removePlayerFromHand(currentPlayer, hand);
 		}
@@ -303,7 +302,7 @@ public class PokerHandServiceImpl implements PokerHandService {
 	@Override
 	public Player getPlayerInSB(HandEntity hand) {
 		Player button = hand.getGame().getPlayerInBTN();
-		//Heads up the Button is the Small Blind
+		// Heads up the Button is the Small Blind
 		if (hand.getPlayers().size() == 2) {
 			return button;
 		}
@@ -318,7 +317,7 @@ public class PokerHandServiceImpl implements PokerHandService {
 		List<PlayerHand> players = new ArrayList<PlayerHand>();
 		players.addAll(hand.getPlayers());
 		Player leftOfButton = PlayerUtil.getNextPlayerInGameOrderPH(players, button);
-		//Heads up, the player who is not the Button is the Big blind
+		// Heads up, the player who is not the Button is the Big blind
 		if (hand.getPlayers().size() == 2) {
 			return leftOfButton;
 		}
@@ -327,10 +326,10 @@ public class PokerHandServiceImpl implements PokerHandService {
 
 	private void updateBlindLevel(Game game) {
 		if (game.getGameStructure().getCurrentBlindEndTime() == null) {
-			//Start the blind
+			// Start the blind
 			setNewBlindEndTime(game);
 		} else if (game.getGameStructure().getCurrentBlindEndTime().before(new Date())) {
-			//Time has expired, next blind level
+			// Time has expired, next blind level
 			List<BlindLevel> blinds = game.getGameStructure().getBlindLevels();
 			Collections.sort(blinds);
 			boolean nextBlind = false;
@@ -362,8 +361,10 @@ public class PokerHandServiceImpl implements PokerHandService {
 			ph.setRoundBetAmount(0);
 			playersInHand.add(ph.getPlayer());
 		}
-		//Next player is to the left of the button.  Given that the button may have been eliminated
-		//In a round of betting, we need to put the button back to determine relative position.
+		// Next player is to the left of the button. Given that the button may
+		// have been eliminated
+		// In a round of betting, we need to put the button back to determine
+		// relative position.
 		Player btn = hand.getGame().getPlayerInBTN();
 		if (!playersInHand.contains(btn)) {
 			playersInHand.add(btn);
@@ -372,11 +373,11 @@ public class PokerHandServiceImpl implements PokerHandService {
 		Player next = PlayerUtil.getNextPlayerInGameOrder(playersInHand, btn);
 		Player firstNext = next;
 
-		//Skip all in players and players that are sitting out
+		// Skip all in players and players that are sitting out
 		while (next.getChips() <= 0 || next.isSittingOut()) {
 			next = PlayerUtil.getNextPlayerInGameOrder(playersInHand, next);
 			if (next.equals(firstNext)) {
-				//Exit condition if all players are all in.
+				// Exit condition if all players are all in.
 				break;
 			}
 		}
@@ -384,16 +385,17 @@ public class PokerHandServiceImpl implements PokerHandService {
 	}
 
 	private void determineWinner(HandEntity hand) {
-		//if only one PH left, everyone else folded
+		// if only one PH left, everyone else folded
 		if (hand.getPlayers().size() == 1) {
 			Player winner = hand.getPlayers().iterator().next().getPlayer();
 			winner.setChips(winner.getChips() + hand.getPot());
 			playerRepository.save(winner);
 		} else {
-			//Refund all in overbet player if applicable before determining winner
+			// Refund all in overbet player if applicable before determining
+			// winner
 			refundOverbet(hand);
 
-			//Iterate through map of players to there amount won.  Persist.
+			// Iterate through map of players to there amount won. Persist.
 			Map<Player, Integer> winners = PlayerUtil.getAmountWonInHandForAllPlayers(hand);
 			if (winners == null) {
 				return;
@@ -409,12 +411,14 @@ public class PokerHandServiceImpl implements PokerHandService {
 	private void refundOverbet(HandEntity hand) {
 		List<PlayerHand> phs = new ArrayList<PlayerHand>();
 		phs.addAll(hand.getPlayers());
-		//Sort from most money contributed, to the least
+		// Sort from most money contributed, to the least
 		Collections.sort(phs, new PlayerHandBetAmountComparator());
 		Collections.reverse(phs);
-		//If there are at least 2 players, and the top player contributed more to the pot than the next player
+		// If there are at least 2 players, and the top player contributed more
+		// to the pot than the next player
 		if (phs.size() >= 2 && (phs.get(0).getBetAmount() > phs.get(1).getBetAmount())) {
-			//Refund that extra amount contributed. Remove from pot, add back to player
+			// Refund that extra amount contributed. Remove from pot, add back
+			// to player
 			int diff = phs.get(0).getBetAmount() - phs.get(1).getBetAmount();
 			phs.get(0).setBetAmount(phs.get(1).getBetAmount());
 			phs.get(0).getPlayer().setChips(phs.get(0).getPlayer().getChips() + diff);
@@ -422,18 +426,28 @@ public class PokerHandServiceImpl implements PokerHandService {
 		}
 	}
 
-	//Helper method to see if there are any outstanding actions left in a betting round
+	public void assertActionResolved(HandEntity hand) {
+		if (!isActionResolved(hand)) {
+			// throw new UnresolvedHandException("There are unresolved preflop
+			// actions");
+		}
+	}
+
+	// Helper method to see if there are any outstanding actions left in a
+	// betting round
 	private boolean isActionResolved(HandEntity hand) {
 		int roundBetAmount = hand.getTotalBetAmount();
 		Set<Integer> turns = new HashSet<>();
 		for (PlayerHand ph : hand.getPlayers()) {
-			//All players should have paid the roundBetAmount or should be all in
+			// All players should have paid the roundBetAmount or should be all
+			// in
 			if (ph.getRoundBetAmount() != roundBetAmount && ph.getPlayer().getChips() > 0) {
 				return false;
 			}
 			turns.add(ph.getTurns());
 		}
-		if (turns.size() > 1) {     //someone still has to play in order to complete the round
+		if (turns.size() > 1) { // someone still has to play in order to
+								// complete the round
 			return false;
 		}
 		return true;

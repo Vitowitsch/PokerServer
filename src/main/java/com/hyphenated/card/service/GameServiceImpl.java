@@ -34,12 +34,18 @@ import com.hyphenated.card.repos.PlayerRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.hyphenated.card.view.GameAction;
 
 @Service
+@ComponentScan(value = "com.hyphenated.card.card", includeFilters = {
+		@ComponentScan.Filter(value = Service.class, type = FilterType.ANNOTATION) })
 public class GameServiceImpl implements GameService {
 
 	@Autowired
@@ -48,8 +54,8 @@ public class GameServiceImpl implements GameService {
 	@Autowired
 	private PlayerActionService playerActionService;
 
-//	@Autowired
-//	private TaskScheduler taskScheduler;
+	// @Autowired
+	// private TaskScheduler taskScheduler;
 
 	@Autowired
 	private GameRepository gameRepository;
@@ -58,7 +64,7 @@ public class GameServiceImpl implements GameService {
 	@Transactional(readOnly = true)
 	public Game getGameById(long id, boolean fetchPlayers) {
 		Game game = gameRepository.findOne(id);
-		//Player list is lazy fetched.  force fetch for players if necessary
+		// Player list is lazy fetched. force fetch for players if necessary
 		if (fetchPlayers) {
 			for (Player p : game.getPlayers()) {
 				p.getId();
@@ -73,13 +79,11 @@ public class GameServiceImpl implements GameService {
 		return gameRepository.save(game);
 	}
 
-
 	private void scheduleGame(Long gameId) {
-//		taskScheduler.schedule({
-//
-//		});
+		// taskScheduler.schedule({
+		//
+		// });
 	}
-
 
 	@Transactional
 	public Player findPlayerToAct(Long gameId) {
@@ -102,16 +106,16 @@ public class GameServiceImpl implements GameService {
 			throw new IllegalStateException("Game already started");
 		}
 
-		//Set started flag
+		// Set started flag
 		game.setStarted(true);
-		//Start at the first blind level for the game
+		// Start at the first blind level for the game
 		GameStructure gs = game.getGameStructure();
 		List<BlindLevel> blinds = gs.getBlindLevels();
 		Collections.sort(blinds);
 		gs.setCurrentBlindLevel(blinds.get(0));
 
-		//Get all players associated with the game.
-		//Assign random position.  Save the player.
+		// Get all players associated with the game.
+		// Assign random position. Save the player.
 		List<Player> players = new ArrayList<Player>();
 		players.addAll(game.getPlayers());
 		Collections.shuffle(players);
@@ -121,11 +125,11 @@ public class GameServiceImpl implements GameService {
 			playerRepository.save(p);
 		}
 
-		//Set Button and Big Blind.  Button is position 1 (index 0)
+		// Set Button and Big Blind. Button is position 1 (index 0)
 		Collections.sort(players);
 		game.setPlayerInBTN(players.get(0));
 
-		//Save and return the updated game
+		// Save and return the updated game
 		scheduleGame(game.getId());
 		return gameRepository.save(game);
 	}
@@ -141,7 +145,7 @@ public class GameServiceImpl implements GameService {
 			throw new IllegalStateException("Cannot have more than 10 players in one game");
 		}
 		player.setGame(game);
-		//Set up player according to game logic.
+		// Set up player according to game logic.
 		if (game.getGameType() == GameType.TOURNAMENT) {
 			player.setChips(game.getGameStructure().getStartingChips());
 		}
