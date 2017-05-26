@@ -71,7 +71,7 @@ public class DataConfig {
 		ds.setDriverClassName("com.mysql.jdbc.Driver");
 		ds.setUrl("jdbc:mysql://localhost:3306/poker");
 		ds.setUsername("root");
-		ds.setPassword("!NyUs4_0");
+		ds.setPassword("RDA");
 		return ds;
 	}
 }
