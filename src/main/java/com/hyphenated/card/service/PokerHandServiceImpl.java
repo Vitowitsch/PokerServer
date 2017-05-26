@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hyphenated.card.exceptions.UnresolvedHandException;
 import com.hyphenated.card.repos.GameRepository;
 import com.hyphenated.card.repos.HandEntityRepository;
 import com.hyphenated.card.repos.PlayerRepository;

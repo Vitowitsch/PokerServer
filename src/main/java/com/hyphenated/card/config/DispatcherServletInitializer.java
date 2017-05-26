@@ -17,38 +17,37 @@
 package com.hyphenated.card.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import javax.servlet.ServletRegistration.Dynamic;
 
+import javax.servlet.ServletRegistration.Dynamic;
 
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{
-                SpringConfig.class,
-                CacheConfig.class,
-//                WebConfig.class,
-                DataConfig.class,
-                SchedulingConfig.class
-        };
-    }
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		return new Class<?>[] { SpringConfig.class, CacheConfig.class, WebConfig.class, TestDataConfig.class,
+				SchedulingConfig.class };
+	}
 
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{
-                WebConfig.class,        //only controllers, rest everything (services, hibernate, transactionMgr, entityManr are in root-context
-//                DataConfig.class
-        };
-    }
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		return new Class<?>[] { WebConfig.class, // only controllers, rest
+													// everything (services,
+													// hibernate,
+													// transactionMgr,
+													// entityManr are in
+													// root-context
+				// DataConfig.class
+		};
+	}
 
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/"};
-    }
+	@Override
+	protected String[] getServletMappings() {
+		return new String[] { "/" };
+	}
 
-    @Override
-    protected void customizeRegistration(Dynamic registration) {
-        registration.setInitParameter("dispatchOptionsRequest", "true");
-    }
+	@Override
+	protected void customizeRegistration(Dynamic registration) {
+		registration.setInitParameter("dispatchOptionsRequest", "true");
+	}
 
 }

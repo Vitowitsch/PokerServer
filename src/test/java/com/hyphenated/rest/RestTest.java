@@ -1,4 +1,4 @@
-package sanvito.rest;
+package com.hyphenated.rest;
 
 import org.junit.Before;
 import static org.hamcrest.Matchers.*;
@@ -10,11 +10,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.google.gson.JsonObject;
+import com.hyphenated.card.AbstractSpringTest;
+import com.hyphenated.card.TestDataConfig;
+import com.hyphenated.card.config.SpringConfig;
 import com.hyphenated.card.config.WebConfig;
 import com.hyphenated.card.domain.CommonTournamentFormats;
 
@@ -28,13 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = WebConfig.class)
-public class RestTest {
+@ContextConfiguration(classes = { WebConfig.class, SpringConfig.class, TestDataConfig.class })
+public class RestTest /* extends AbstractSpringTest */ {
 
 	private static final Logger logger = LogManager.getLogger(RestTest.class);
 
