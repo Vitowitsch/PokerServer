@@ -23,11 +23,11 @@ THE SOFTWARE.
 */
 package com.hyphenated.card.service;
 
-import com.hyphenated.card.domain.Game;
-import com.hyphenated.card.domain.Player;
-
 import java.util.Collection;
 import java.util.List;
+
+import com.hyphenated.card.domain.Game;
+import com.hyphenated.card.domain.Player;
 
 /**
  * Service to handle the overall game operations

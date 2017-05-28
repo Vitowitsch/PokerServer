@@ -23,8 +23,6 @@ THE SOFTWARE.
 */
 package com.hyphenated.card.holder;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
 import com.hyphenated.card.Card;
@@ -32,6 +30,8 @@ import com.hyphenated.card.HandType;
 import com.hyphenated.card.eval.HandRank;
 import com.hyphenated.card.eval.HandRankEvaluator;
 import com.hyphenated.card.eval.TwoPlusTwoHandEvaluator;
+
+import junit.framework.TestCase;
 
 /**
  * JUnit tests for the Seven Card Poker Hand Evaluation.

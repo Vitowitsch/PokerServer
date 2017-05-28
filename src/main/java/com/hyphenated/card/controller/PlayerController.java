@@ -28,11 +28,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Controller;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.hyphenated.card.domain.Game;
 import com.hyphenated.card.domain.Player;
@@ -49,7 +51,10 @@ import com.hyphenated.card.view.PlayerStatusObject;
  * 
  * @author jacobhyphenated Copyright (c) 2013
  */
-@Controller
+//@Controller
+@RestController
+@EnableAutoConfiguration
+@EnableDiscoveryClient
 public class PlayerController {
 
 	@Autowired

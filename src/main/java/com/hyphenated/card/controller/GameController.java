@@ -32,12 +32,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.hyphenated.card.domain.CommonTournamentFormats;
 import com.hyphenated.card.domain.Game;
@@ -59,7 +62,10 @@ import com.hyphenated.card.util.GameUtil;
  * 
  * @author jacobhyphenated
  */
-@Controller
+// @Controller
+@RestController
+@EnableAutoConfiguration
+@EnableDiscoveryClient
 @ComponentScan("com.hyphenated.card.service,com.hyphenated.card")
 public class GameController {
 
@@ -68,6 +74,10 @@ public class GameController {
 
 	@Autowired
 	private PokerHandService handService;
+
+	public static void main(String[] args) {
+		SpringApplication.run(GameController.class, args);
+	}
 
 	/**
 	 * Get a list of currently available game structures <br />
@@ -211,7 +221,7 @@ public class GameController {
 	 *         <em>2-9,T,J,Q,K,A</em> as the rank and <em>c,s,d,h</em> as the
 	 *         suit. For example: Ace of clubs is <em>Ac</em> and Nine of
 	 *         Diamonds is <em>9d</em> <br />
-	 * 		<br />
+	 *         <br />
 	 *         The json field values are card1, card2, card3. Example:
 	 *         {"card1":"Xx","card2":"Xx","card3":"Xx"}
 	 */

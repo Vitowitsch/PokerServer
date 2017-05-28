@@ -1,9 +1,10 @@
 package com.hyphenated.card.repos;
 
-import com.hyphenated.card.domain.Game;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.hyphenated.card.domain.Game;
 
 /**
  * Created by Nitin on 25-10-2015.

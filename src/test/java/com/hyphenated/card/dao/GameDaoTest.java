@@ -23,12 +23,13 @@ THE SOFTWARE.
 */
 package com.hyphenated.card.dao;
 
-import com.hyphenated.card.AbstractSpringTest;
-import com.hyphenated.card.domain.Game;
-import com.hyphenated.card.domain.GameType;
-import com.hyphenated.card.domain.Player;
-import com.hyphenated.card.repos.GameRepository;
-import com.hyphenated.card.repos.PlayerRepository;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.apache.commons.collections4.IteratorUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,11 +37,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.hyphenated.card.AbstractSpringTest;
+import com.hyphenated.card.domain.Game;
+import com.hyphenated.card.domain.GameType;
+import com.hyphenated.card.domain.Player;
+import com.hyphenated.card.repos.GameRepository;
+import com.hyphenated.card.repos.PlayerRepository;
 
 /**
  * Basic DAO test.  Tests some of the simple CRUD methods of the generic DAO using the gameRepository.

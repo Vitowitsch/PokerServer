@@ -25,8 +25,8 @@ package com.hyphenated.card.holder;
 
 import java.util.Iterator;
 
-import com.hyphenated.card.Card;
 import com.google.common.collect.Iterators;
+import com.hyphenated.card.Card;
 
 /**
  * Iterator used for iterating over cards contained in several card holders.

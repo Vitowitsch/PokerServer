@@ -33,9 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.hyphenated.card.repos.GameRepository;
-import com.hyphenated.card.repos.HandEntityRepository;
-import com.hyphenated.card.repos.PlayerRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +49,9 @@ import com.hyphenated.card.domain.HandEntity;
 import com.hyphenated.card.domain.Player;
 import com.hyphenated.card.domain.PlayerHand;
 import com.hyphenated.card.domain.PlayerStatus;
+import com.hyphenated.card.repos.GameRepository;
+import com.hyphenated.card.repos.HandEntityRepository;
+import com.hyphenated.card.repos.PlayerRepository;
 
 public class PlayerActionServiceTest extends AbstractSpringTest {
 

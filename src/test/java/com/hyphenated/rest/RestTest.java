@@ -1,9 +1,20 @@
 package com.hyphenated.rest;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
-import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,27 +25,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.hyphenated.card.AbstractSpringTest;
-import com.hyphenated.card.TestDataConfig;
 import com.hyphenated.card.config.SpringConfig;
+import com.hyphenated.card.config.TestDataConfig;
 import com.hyphenated.card.config.WebConfig;
 import com.hyphenated.card.domain.CommonTournamentFormats;
 
-import junit.framework.Assert;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { WebConfig.class, SpringConfig.class, TestDataConfig.class })
-public class RestTest /* extends AbstractSpringTest */ {
+@SpringBootTest(classes = { WebConfig.class, SpringConfig.class, TestDataConfig.class })
+public class RestTest {
 
 	private static final Logger logger = LogManager.getLogger(RestTest.class);
 

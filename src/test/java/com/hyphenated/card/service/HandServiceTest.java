@@ -33,8 +33,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.hyphenated.card.repos.GameRepository;
-import com.hyphenated.card.repos.PlayerRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +48,8 @@ import com.hyphenated.card.domain.GameType;
 import com.hyphenated.card.domain.HandEntity;
 import com.hyphenated.card.domain.Player;
 import com.hyphenated.card.domain.PlayerHand;
+import com.hyphenated.card.repos.GameRepository;
+import com.hyphenated.card.repos.PlayerRepository;
 
 public class HandServiceTest extends AbstractSpringTest {
 

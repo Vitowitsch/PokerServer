@@ -28,19 +28,22 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.hyphenated.card.domain.*;
-import com.hyphenated.card.repos.GameRepository;
-import com.hyphenated.card.repos.PlayerRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 
+import com.hyphenated.card.domain.BlindLevel;
+import com.hyphenated.card.domain.Game;
+import com.hyphenated.card.domain.GameStructure;
+import com.hyphenated.card.domain.GameType;
+import com.hyphenated.card.domain.Player;
+import com.hyphenated.card.domain.PlayerStatus;
+import com.hyphenated.card.repos.GameRepository;
+import com.hyphenated.card.repos.PlayerRepository;
 import com.hyphenated.card.view.GameAction;
 
 @Service

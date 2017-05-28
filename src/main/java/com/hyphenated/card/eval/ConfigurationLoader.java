@@ -26,9 +26,11 @@ package com.hyphenated.card.eval;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import com.google.common.io.Closeables;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.io.Closeables;
 
 /**
  * Utility class for loading configuration and resource files

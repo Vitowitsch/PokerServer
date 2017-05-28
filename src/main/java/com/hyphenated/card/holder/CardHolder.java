@@ -27,8 +27,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import com.hyphenated.card.Card;
 import com.google.common.collect.Iterators;
+import com.hyphenated.card.Card;
 
 /**
  * A container designed for storing cards.

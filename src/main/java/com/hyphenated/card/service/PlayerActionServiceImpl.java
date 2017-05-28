@@ -27,8 +27,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.hyphenated.card.repos.HandEntityRepository;
-import com.hyphenated.card.repos.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +36,8 @@ import com.hyphenated.card.domain.HandEntity;
 import com.hyphenated.card.domain.Player;
 import com.hyphenated.card.domain.PlayerHand;
 import com.hyphenated.card.domain.PlayerStatus;
+import com.hyphenated.card.repos.HandEntityRepository;
+import com.hyphenated.card.repos.PlayerRepository;
 import com.hyphenated.card.util.PlayerUtil;
 import com.hyphenated.card.view.GameAction;
 

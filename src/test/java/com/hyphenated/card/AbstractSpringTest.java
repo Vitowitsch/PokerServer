@@ -27,11 +27,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hyphenated.card.config.SpringConfig;
+import com.hyphenated.card.config.TestDataConfig;
+import com.hyphenated.card.config.WebConfig;
 
 /**
  * Abstract test super class for JUnit tests that need the spring context and an
@@ -40,7 +42,7 @@ import com.hyphenated.card.config.SpringConfig;
  * @author jacobhyphenated
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { SpringConfig.class, TestDataConfig.class })
+@SpringBootTest(classes = { SpringConfig.class, TestDataConfig.class})
 public abstract class AbstractSpringTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@PersistenceContext
